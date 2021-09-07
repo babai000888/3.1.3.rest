@@ -1,36 +1,51 @@
 package com.babai.spring_boot.service.impl;
 
 
-import com.babai.spring_boot.dao.UserDao;
 import com.babai.spring_boot.model.User;
+import com.babai.spring_boot.repository.UserRepository;
 import com.babai.spring_boot.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserDao dao;
+    private final UserRepository userRepository;
 
     @Override
-    public List<User> getAll() { return dao.getAll(); }
+    public List<User> getAllUsers() { return userRepository.findAll(); }
 
     @Override
-    public void add (User user, List<Long> id) { dao.add(user,id); }
+    public void addUser(User user) {
+        if (userRepository.findUserByName(user.getName()).orElse(null) != null) {
+            System.out.println("Duplication of user: "+ user);
+            return;
+        }
+        saveUser(user);
+    }
+
+
+    private final PasswordEncoder passwordEncoder;
+
+    private User encodePassword(User user) {
+        if(user.getId() == null || !user.getPassword().equals(userRepository.findById(user.getId()).orElse(null).getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        return user;
+    }
 
     @Override
-    public void save(User user, List<Long> id) { dao.save(user,id); }
+    public void saveUser(User user) { userRepository.save(encodePassword(user)); }
 
     @Override
-    public User getUserById(Long id) { return dao.getUserById(id); }
+    public User getUserById(Long id) { return userRepository.findById(id).orElse(null); }
 
     @Override
-    public void delete(Long id) { dao.delete(id); }
-
-
+    public void deleteUserById(Long id) { userRepository.deleteById(id); }
 }

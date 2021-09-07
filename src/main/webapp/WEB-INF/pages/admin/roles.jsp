@@ -12,7 +12,7 @@
 
 <div>
     <div>
-        <a th:href="@{/admin}" class="btn btn-info">back to admin</a>
+        <a th:href="@{/admin}" class="btn btn-info">Return to Admin page</a>
     </div>
 </div>
 <br>

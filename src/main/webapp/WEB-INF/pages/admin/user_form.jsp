@@ -8,6 +8,13 @@
 <body>
 
 <h1>Fill in user data</h1>
+<br>
+<div>
+    <div>
+        <a th:href="@{/admin}" class="btn btn-info">Return to Admin page</a>
+    </div>
+</div>
+<br>
 
 <form action="#" th:action="${action}"  method="post" >
     <table>

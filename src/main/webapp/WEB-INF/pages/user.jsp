@@ -14,6 +14,11 @@
     <h4><a href="/logout">Logout</a></h4>
 </sec:authorize>
 <br>
+<div>
+    <div>
+        <a th:href="@{/}" class="btn btn-info">Return to Start page</a>
+    </div>
+</div>
 <br>
 <div>
     <table>

@@ -5,8 +5,14 @@
     <title>userList</title>
 </head>
 <body>
-<br/>
 <h1> TABLE of USERS </h1>
+<br>
+<div>
+    <div>
+        <a th:href="@{/}" class="btn btn-info">Return to Start page</a>
+    </div>
+</div>
+<br>
 <div>
     <div>
         <a th:href="@{/add}" class="btn btn-info">Add new User</a>
