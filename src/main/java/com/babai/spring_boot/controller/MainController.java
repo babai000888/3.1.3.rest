@@ -41,7 +41,10 @@ public class MainController {
 
     @GetMapping("/admin")
     public String getAllUsers(Model model) {
+        model.addAttribute("userActive", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("listRoles", roleService.getAllRoles());
+        model.addAttribute("nuser", new User());
         return "admin";
     }
 
@@ -58,7 +61,7 @@ public class MainController {
         model.addAttribute(new User());
         model.addAttribute("listRoles", roleService.getAllRoles());
         model.addAttribute("action", "addUser");
-        return "admin/user_form";
+        return "admin";
     }
 
     @PostMapping("/addUser")

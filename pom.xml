@@ -61,7 +61,26 @@
             <artifactId>thymeleaf-spring5</artifactId>
             <version>3.0.12.RELEASE</version>
         </dependency>
-    </dependencies>
+		<!-- BOOTSTRAP -->
+		<!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.6.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.webjars/popper.js -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>popper.js</artifactId>
+			<version>2.9.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>5.1.0</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
