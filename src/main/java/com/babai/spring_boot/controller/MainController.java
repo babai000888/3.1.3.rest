@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -25,9 +26,7 @@ public class MainController {
     //Start page
 
     @GetMapping("/")
-    public String startPage() {
-        return "index";
-    }
+    public String startPage() { return "index"; }
 
     //User Page
 
@@ -56,14 +55,6 @@ public class MainController {
 
     // Add new user page
 
-    @GetMapping("/add")
-    public String addUser(Model model) {
-        model.addAttribute(new User());
-        model.addAttribute("listRoles", roleService.getAllRoles());
-        model.addAttribute("action", "addUser");
-        return "admin";
-    }
-
     @PostMapping("/addUser")
     public String addUser (User user, @RequestParam(value = "checkedRoles"
             , required = false) List<Long> roleIds) {
@@ -79,12 +70,9 @@ public class MainController {
     // Edit user page
 
     @GetMapping("/edit")
-    private String editUser (Model model, Long id) {
-        System.out.println(userService.getUserById(id).toString());
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("listRoles", roleService.getAllRoles());
-        model.addAttribute("action", "editUser");
-        return "admin/user_form";
+    @ResponseBody
+    private User editUser (Model model, Long id) {
+        return userService.getUserById(id);
     }
 
     @PostMapping("/editUser")

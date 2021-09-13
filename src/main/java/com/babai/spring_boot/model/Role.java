@@ -1,6 +1,8 @@
 package com.babai.spring_boot.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -28,6 +30,7 @@ public class Role implements GrantedAuthority {
             name = "users_roles",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonBackReference
     Set<User> users;
 
     public Role(String role) {

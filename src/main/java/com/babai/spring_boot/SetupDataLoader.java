@@ -27,6 +27,7 @@ public class SetupDataLoader implements
         //       admin.setId(1L);
         admin.setName("admin");
         admin.setPassword("admin");
+        admin.setEmail("admin@mail.ru");
         //       admin.setLastName("INIT");
         //        admin.setAge(50);
         admin.setRoles(Set.of(roleService.getRoleByName("ROLE_ADMIN"),roleService.getRoleByName("ROLE_USER")));
@@ -36,6 +37,7 @@ public class SetupDataLoader implements
         User user = new User();
         user.setName("user");
         user.setPassword("user");
+        user.setEmail("user@mail.ru");
         user.setRoles(Set.of(roleService.getRoleByName("ROLE_USER")));
         userService.saveUser(user);
 
