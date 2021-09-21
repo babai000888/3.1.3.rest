@@ -5,7 +5,6 @@ import com.babai.spring_boot.model.Role;
 import com.babai.spring_boot.repository.RoleRepository;
 import com.babai.spring_boot.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

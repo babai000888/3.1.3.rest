@@ -20,10 +20,9 @@ function extractUser(form) {
 //////////////// Validate user
 function validate(body) {
     const regexEmail = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-    if(body.name != "" &&
+    return body.name != "" &&
         body.password != "" &&
-        ( (body.email == "") || regexEmail.test(body.email) )) return true
-    else return false
+        ((body.email == "") || regexEmail.test(body.email));
 }
 
 
@@ -64,7 +63,7 @@ async function handleClickModal(event) {
         modal[6].appendChild(option)
     })
     // launch modal window
-    var myModal = new bootstrap.Modal(document.getElementById(event.target.name))
+    const myModal = new bootstrap.Modal(document.getElementById(event.target.name))
     myModal.show()
     // submit modal
      const submit = document.querySelectorAll('.Submit')

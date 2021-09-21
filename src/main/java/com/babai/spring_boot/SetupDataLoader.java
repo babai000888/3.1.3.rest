@@ -4,7 +4,6 @@ import com.babai.spring_boot.model.User;
 import com.babai.spring_boot.service.RoleService;
 import com.babai.spring_boot.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;

@@ -73,7 +73,7 @@ function editUser(body) {
 }
 
 function deleteUser(body) {
-    sendRequest('DELETE', "/api/users/" + body.id).then(resp=>{
+    sendRequest('DELETE', "/api/users/" + body.id).then(()=>{
         for (let i = 0; i < usersArray.length; i++) {
             let user = usersArray[i]
             if (user['id'] == body.id) {

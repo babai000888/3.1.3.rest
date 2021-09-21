@@ -1,8 +1,6 @@
 package com.babai.spring_boot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,9 +61,4 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() { return true; }
-
-    public void addRole(Role role) {
-        if(this.roles ==null) { this.roles = new HashSet<>(); }
-        this.roles.add(role);
-    }
 }
