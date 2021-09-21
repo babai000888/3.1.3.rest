@@ -31,61 +31,13 @@ public class MainController {
     //User Page
 
     @GetMapping("/user")
-    public String userPage(Model model) {
-        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return "user";
-    }
+    public String userPage() {return "user"; }
 
-    // Admin page + delete user
+    // Admin page
 
     @GetMapping("/admin")
-    public String getAllUsers(Model model) {
-        model.addAttribute("userActive", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("listRoles", roleService.getAllRoles());
-        model.addAttribute("nuser", new User());
-        return "admin";
-    }
+    public String getAllUsers() { return "admin"; }
 
-    @GetMapping("/delete")
-    private String deleteUserById( Long id ) {
-        userService.deleteUserById(id);
-        return "redirect:/admin";
-    }
-
-    // Add new user page
-
-    @PostMapping("/addUser")
-    public String addUser (User user, @RequestParam(value = "checkedRoles"
-            , required = false) List<Long> roleIds) {
-        if(roleIds !=null) {
-            for (Long roleId : roleIds) {
-                user.addRole(roleService.getRoleById(roleId));
-            }
-        }
-        userService.addUser(user);
-        return "redirect:/admin";
-    }
-
-    // Edit user page
-
-    @GetMapping("/edit")
-    @ResponseBody
-    private User editUser (Model model, Long id) {
-        return userService.getUserById(id);
-    }
-
-    @PostMapping("/editUser")
-    public String updateUser(User user, @RequestParam(value = "checkedRoles"
-            , required = false) List<Long> roleIds) {
-        if(roleIds != null) {
-            for (Long roleId : roleIds) {
-                user.addRole(roleService.getRoleById(roleId));
-            }
-        }
-        userService.saveUser(user);
-        return "redirect:/admin";
-    }
 
 // Edit roles page
 

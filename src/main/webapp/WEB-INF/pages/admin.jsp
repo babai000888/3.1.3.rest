@@ -11,6 +11,7 @@
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
+
     <title>Admin Panel</title>
 </head>
 
@@ -21,17 +22,9 @@
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark white scrolling-navbar bg-dark">
             <div class="container-fluid">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <a class="navbar-brand text-white">
-                        <script>
-                            document.write("[[${userActive.getEmail()}]]");
-                        </script>
-                    </a>
+                    <a id="usersMail" class="navbar-brand text-white">from script</a>
                     <span class="navbar-text text-white">with roles:&nbsp;</span>
-                    <span class="navbar-text text-white">
-              <script>
-                document.write("[[${userActive.getRoles()}]]");
-              </script>
-            </span>
+                    <span id="usersRoles" class="navbar-text text-white">from script</span>
                 </ul>
                 <sec:authorize access="isAuthenticated()">
                     <a class="text-secondary" href="/logout">Logout</a>
@@ -86,17 +79,17 @@
                 <h3>Admin Panel</h3>
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" data-toggle="pill" role="tab" href="#table">Users
-                            Table</a>
+                        <a class="nav-link active" aria-current="page" data-toggle="pill"
+                           role="tab" href="#table">Users Table</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" role="tab" href="#user">New User</a>
+                        <a class="nav-link" data-toggle="pill" role="tab" href="#addUserForm">New User</a>
                     </li>
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="table">All Users
                         <!-- USERS TABLE -->
-                        <table class="table table-light table-striped">
+                        <table id="usersTable" class="table table-light table-striped">
                             <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -109,219 +102,44 @@
                                 <th scope="col">Delete</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr th:each="user : ${users}">
-                                <th scope="row" th:text="${user.id}">id</th>
-                                <td th:text="${user.name}">name</td>
-                                <td th:text="${user.lastName}">lastName</td>
-                                <td th:text="${user.age}">age</td>
-                                <td th:text="${user.email}">email</td>
-                                <td th:text="${user.roles}">roles</td>
-                                <td><a class="btn btn-info text-white editButton" th:value="@{/edit(id=${user.id})}">Edit</a></td>
-                                <td><a class="btn btn-danger text-white deleteButton" th:value="@{/edit(id=${user.id})}">Delete</a>
-                                </td>
-
-                                <script>
-                                    jQuery(document).ready(function () {
-
-                                        let button = jQuery('.editButton');
-                                        button.on('click', function (event) {
-                                            event.preventDefault();
-                                            let href = jQuery(this).attr('value');
-                                            jQuery.get(href, function (userData, status) {
-                                                jQuery('#uId').val(userData.id).attr('placeholder', userData.id);
-                                                jQuery('#uName').val(userData.name).attr('placeholder', userData.name);
-                                                jQuery('#uLastName').val(userData.lastName).attr('placeholder', userData.lastName);
-                                                jQuery('#uAge').val(userData.age).attr('placeholder', userData.age);
-                                                jQuery('#uEmail').val(userData.email).attr('placeholder', userData.email);
-                                                jQuery('#uPassword').val(userData.password).attr('placeholder', userData.password);
-                                                jQuery('#uRoles').val(userData.roles).attr('placeholder', userData.roles);
-                                            });
-                                            jQuery("#editModal").modal();
-                                        });
-                                    });
-                                </script>
-
-                                <!-- Modal Edit begin -->
-                                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editModalTitle">Edit user</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div id="printId" class="modal-body">
-                                                <div class="container-fluid">
-                                                    <form action="editUser" method="post">
-
-                                                        <!-- Vertical -->
-                                                        <div class="form-group text-center">
-                                                            <label for="uID">ID</label>
-                                                            <input type="text" th:field="${nuser.id}" minlength="2" maxlength="20" id="uId"
-                                                                   class="form-control" readonly />
-                                                            <label for="FirstName">First Name</label>
-                                                            <input type="text" th:field="${nuser.name}" minlength="2" maxlength="20" id="uName"
-                                                                   class="form-control" />
-                                                            <label for="LastName">Last Name</label>
-                                                            <input type="text" th:field="${nuser.lastName}" minlength="2" maxlength="20"
-                                                                   id="uLastName" class="form-control" />
-                                                            <label for="age">Age</label>
-                                                            <input type="number" th:field="${nuser.age}" min="0" max="100" id="uAge"
-                                                                   class="form-control" />
-                                                            <label for="email">Email</label>
-                                                            <input type="email" th:field="${nuser.email}" id="uEmail" class="form-control" />
-                                                            <label for="password">Password</label>
-                                                            <input type="password" th:field="${nuser.password}" minlength="4" maxlength="10"
-                                                                   id="uPassword" class="form-control" />
-                                                            <label for="role">Role</label>
-                                                            <select th:name="checkedRoles" id="uRoles" class="form-control" multiple required
-                                                                    size="2">
-                                                                <div th:each="role : ${listRoles}">
-                                                                    <option th:text="${role.getRole()}" th:value="${role.getId()}" name="roles">
-                                                                    </option>
-                                                                </div>
-                                                            </select>
-                                                            <br>
-
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">Edit</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Edit end -->
-
-                                <script>
-                                    jQuery(document).ready(function () {
-
-                                        let button = jQuery('.deleteButton');
-                                        button.on('click', function (event) {
-                                            event.preventDefault();
-                                            let href = jQuery(this).attr('value');
-                                            jQuery.get(href, function (userData, status) {
-                                                jQuery('#dId').val(userData.id).attr('placeholder', userData.id);
-                                                jQuery('#dName').val(userData.name).attr('placeholder', userData.name);
-                                                jQuery('#dLastName').val(userData.lastName).attr('placeholder', userData.lastName);
-                                                jQuery('#dAge').val(userData.age).attr('placeholder', userData.age);
-                                                jQuery('#dEmail').val(userData.email).attr('placeholder', userData.email);
-                                                jQuery('#dPassword').val(userData.password).attr('placeholder', userData.password);
-                                                jQuery('#dRoles').val(userData.roles).attr('placeholder', userData.roles);
-                                            });
-                                            jQuery("#deleteModal").modal();
-                                        });
-                                    });
-                                </script>
-
-                                <!-- Modal Delete begin -->
-                                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="editModalTitle" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="deleteModalTitle">Delete user</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div id="printId1" class="modal-body">
-                                                <div class="container-fluid">
-                                                    <form action="delete" method="get">
-
-                                                        <!-- Vertical -->
-                                                        <div class="form-group text-center">
-                                                            <label for="uID">ID</label>
-                                                            <input type="text" th:field="${nuser.id}" minlength="2" maxlength="20" id="dId"
-                                                                   class="form-control" readonly />
-                                                            <label for="FirstName">First Name</label>
-                                                            <input type="text" th:field="${nuser.name}" minlength="2" maxlength="20" id="dName"
-                                                                   class="form-control" readonly />
-                                                            <label for="LastName">Last Name</label>
-                                                            <input type="text" th:field="${nuser.lastName}" minlength="2" maxlength="20"
-                                                                   id="dLastName" class="form-control" readonly />
-                                                            <label for="age">Age</label>
-                                                            <input type="number" th:field="${nuser.age}" min="0" max="100" id="dAge"
-                                                                   class="form-control" readonly />
-                                                            <label for="email">Email</label>
-                                                            <input type="email" th:field="${nuser.email}" id="dEmail" class="form-control"
-                                                                   readonly />
-                                                            <label for="password">Password</label>
-                                                            <input type="password" th:field="${nuser.password}" minlength="4" maxlength="10"
-                                                                   id="dPassword" class="form-control" readonly />
-                                                            <label for="role">Role</label>
-                                                            <select th:name="checkedRoles" id="dRoles" class="form-control" multiple required
-                                                                    size="2" readonly>
-                                                                <div th:each="role : ${listRoles}">
-                                                                    <option th:text="${role.getRole()}" th:value="${role.getId()}" name="roles">
-                                                                    </option>
-                                                                </div>
-                                                            </select>
-                                                            <br>
-
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                                            </button>
-                                                            <button type="submit" class="btn btn-danger"
-                                                                    th:value="@{/delete(id=${user.id})}">Delete
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal Delet end -->
-
-                            </tr>
+                            <tbody id="usersBody">
+ <!--            Rows from script               -->
                             </tbody>
                         </table>
                     </div>
+
                     <!-- NEWUSER -->
-                    <div role="tabpanel" class="tab-pane fade bg-white" id="user">Add new user
+                    <div id="addUserForm" role="tabpanel" class="tab-pane fade bg-white">Add new user
                         <div class="mx-auto text-center bg-white" style="width: 400px;">
                             <div class="container-fluid ">
-                                <form action="addUser" method="post">
+                                <form>
 
                                     <!-- Vertical -->
                                     <div class="form-group">
-                                        <label for="FirstName">First Name</label>
-                                        <input type="text" th:field="${nuser.name}" required minlength="2" maxlength="20" id="FirstName"
-                                               class="form-control" placeholder="${nuser.name}">
-                                        <label for="LastName">Last Name</label>
-                                        <input type="text" th:field="${nuser.lastName}" minlength="2" maxlength="20" id="LastName"
-                                               class="form-control" placeholder="${nuser.lastName}">
-                                        <label for="age">Age</label>
-                                        <input type="number" th:field="${nuser.age}" min="0" max="100" id="age" class="form-control"
-                                               placeholder="${nuser.age}">
-                                        <label for="email">Email</label>
-                                        <input type="email" th:field="${nuser.email}" id="email" class="form-control"
-                                               placeholder="${nuser.email}">
-                                        <label for="password">Password</label>
-                                        <input type="password" th:field="${nuser.password}" required minlength="4" maxlength="10"
-                                               id="password" class="form-control" placeholder="${nuser.password}">
-                                        <label for="role">Role</label>
-                                        <select th:name="checkedRoles" id="role" class="form-control" multiple required size="2">
-                                            <div th:each="role : ${listRoles}">
-                                                <option th:text="${role.getRole()}" th:value="${role.getId()}" name="roles"></option>
-                                            </div>
+                                        <input id="aid" type="hidden"  minlength="2" maxlength="20"
+                                               class="form-control addUserForm" readonly />
+                                        <label for="aname">First Name</label>
+                                        <input id="aname" type="text" required minlength="2" maxlength="20"
+                                               class="form-control addUserForm" >
+                                        <label for="alastname">Last Name</label>
+                                        <input id="alastname" type="text" minlength="2" maxlength="20"
+                                               class="form-control addUserForm">
+                                        <label for="aage">Age</label>
+                                        <input id="aage" type="number" min="0" max="100"
+                                               class="form-control addUserForm">
+                                        <label for="aemail">Email</label>
+                                        <input id="aemail" type="email"
+                                               class="form-control addUserForm">
+                                        <label for="apassword">Password</label>
+                                        <input id="apassword" type="password" required minlength="4" maxlength="10"
+                                               class="form-control addUserForm">
+                                        <label for="aroles">Role</label>
+                                        <select id="aroles" class="form-control addUserForm" multiple required
+                                                size="2">
                                         </select>
                                         <br>
 
-                                        <button type="submit" class="btn btn-success">Add new user</button>
+                                        <input id="addUserButton"  type="submit" value="Add new user" class="btn btn-success"></input>
                                     </div>
                                 </form>
                             </div>
@@ -332,6 +150,130 @@
         </div>
     </div>
 </KONTEINER>
+
+
+<!-- Modal Edit begin -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Edit user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="printId" class="modal-body">
+                <div class="container-fluid">
+                    <form>
+
+                        <!-- Vertical -->
+                        <div class="form-group text-center">
+                            <label for="eid">ID</label>
+                            <input id="eid" type="text"  minlength="2" maxlength="20"
+                                   class="form-control editModal" readonly />
+                            <label for="ename">First Name</label>
+                            <input id="ename" type="text"  minlength="2" maxlength="20"
+                                   class="form-control editModal"/>
+                            <label for="elastname">Last Name</label>
+                            <input id="elastname" type="text" minlength="2" maxlength="20"
+                                   class="form-control editModal" field="sldkfj"/>
+                            <label for="eage">Age</label>
+                            <input id="eage" type="number" min="0" max="100"
+                                   class="form-control editModal" />
+                            <label for="eemail">Email</label>
+                            <input id="eemail" type="email" class="form-control editModal" />
+                            <label for="epassword">Password</label>
+                            <input id="epassword" type="password" minlength="4" maxlength="10"
+                                   class="form-control editModal" />
+                            <label for="eroles">Role</label>
+                            <select id="eroles" class="form-control editModal" multiple required
+                                    size="2">
+                                <-- filled by javascript -->
+                            </select>
+                            <br>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary Submit" data-dismiss="modal">Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Edit end -->
+
+
+<!-- Modal Delete begin -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+     aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Delete user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="printId1" class="modal-body">
+                <div class="container-fluid">
+                    <form>
+
+                        <!-- Vertical -->
+                        <div class="form-group text-center">
+                            <label>ID</label>
+                            <input type="text" minlength="2" maxlength="20"
+                                   class="form-control deleteModal" readonly />
+                            <label>First Name</label>
+                            <input type="text" minlength="2" maxlength="20"
+                                   class="form-control deleteModal" readonly />
+                            <label>Last Name</label>
+                            <input type="text" minlength="2" maxlength="20"
+                                   class="form-control deleteModal" readonly />
+                            <label>Age</label>
+                            <input type="number" min="0" max="100"
+                                   class="form-control deleteModal" readonly />
+                            <label>Email</label>
+                            <input type="email" class="form-control deleteModal"
+                                   readonly />
+                            <label>Password</label>
+                            <input type="password" minlength="4" maxlength="10"
+                                   class="form-control deleteModal" readonly />
+                            <label>Role</label>
+                            <select class="form-control deleteModal" multiple required size="2" readonly>
+                              <!-- filled by script -->
+                            </select>
+                            <br>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger Submit" data-dismiss="modal">Delete</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Delete end -->
+
+
+
+<!-- CRUD script -->
+<script src="/js/rest.js"></script>
+<script src="/js/tables.js"></script>
+<script src="/js/mainAdmin.js"></script>
+<script src="/js/event.js"></script>
+<script src="/js/crud.js"></script>
+
 
 <!-- JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>

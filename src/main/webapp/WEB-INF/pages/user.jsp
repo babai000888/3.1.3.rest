@@ -1,6 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <!-- Required meta tags -->
@@ -12,7 +13,7 @@
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-    <title>Admin Panel</title>
+    <title>User Panel</title>
 </head>
 
 <body class="grey lighten=3">
@@ -22,17 +23,9 @@
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark white scrolling-navbar bg-dark">
             <div class="container-fluid">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <a class="navbar-brand text-white">
-                        <script>
-                            document.write("[[${user.getEmail()}]]");
-                        </script>
-                    </a>
+                    <a id="userMail"class="navbar-brand text-white">from script</a>
                     <span class="navbar-text text-white">with roles:&nbsp;</span>
-                    <span class="navbar-text text-white">
-                <script>
-                  document.write("[[${user.getRoles()}]]");
-                </script>
-              </span>
+                    <span id="userRoles" class="navbar-text text-white">from script</span>
                 </ul>
                 <sec:authorize access="isAuthenticated()">
                     <a class="text-secondary" href="/logout">Logout</a>
@@ -47,12 +40,11 @@
         <div class="row">
 
             <!-- SIDEBAR -->
-            <div class="d-flex flex-column bg-white">
+            <div class="d-flex flex-column bg-white" >
                 <br>
                 <br>
                 <ul class="nav nav-pills flex-column mb-auto" style="width: 200px;">
-                    <sec:authorize access="denyAll()">
-                        <li class="nav-item">
+                        <li class="nav-item" th:if="${#request.isUserInRole('ROLE_ADMIN')}">
                             <a href="admin" class="nav-link">
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="admin" />
@@ -60,7 +52,6 @@
                                 Admin
                             </a>
                         </li>
-                    </sec:authorize>
                     <li>
                         <a href="user" class="nav-link active" aria-current="page">
                             <svg class="bi me-2" width="16" height="16">
@@ -79,7 +70,7 @@
                 <br>
                 <h3>User information-page</h3>
                 <!-- USERS TABLE -->
-                <table class="table table-light table-striped">
+                <table id="userTable" class="table table-light table-striped">
                     <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -90,21 +81,21 @@
                         <th scope="col">Role</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row" th:text="${user.id}">id</th>
-                        <td th:text="${user.name}">name</td>
-                        <td th:text="${user.lastName}">lastName</td>
-                        <td th:text="${user.age}">age</td>
-                        <td th:text="${user.email}">email</td>
-                        <td th:text="${user.roles}">roles</td>
-                    </tr>
+                    <tbody id="userBody">
+<!--      Rows from script      -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </KONTEINER>
+
+
+<!-- CRUD script -->
+<script src="/js/rest.js"></script>
+<script src="/js/tables.js"></script>
+<script src="/js/mainUser.js"></script>
+<script src="/js/crud.js"></script>
 
 <!-- JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
